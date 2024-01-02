@@ -1,0 +1,130 @@
+final.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #container {
+            position: relative;
+            width: 300px;
+            height: 250px;
+            border: 2px solid #000;
+            overflow: hidden;
+        }
+
+        #circle {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid black;
+            transform-origin: center;
+        
+        }
+
+        #lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: 0 50%;
+            overflow:hidden;
+        }
+
+        #lines::before,
+        #lines::after,
+        #lines2::after,
+        #lines2::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background-color: #000;
+            top: 50%;
+            left: 0;
+        }
+
+        #lines::after {
+            height:2px;
+            transform: rotate(90deg);
+        }
+        #lines2::after{
+            transform:rotate(-45deg);
+        }
+        #lines2::before {
+            transform: rotate(45deg);
+        }
+        button{
+            margin-left:15px
+        }
+    </style>
+    <title>Rotating Circle with Two Lines</title>
+</head>
+<body>
+    <div id="container">
+        <div id="circle">
+            <div id="lines"></div>
+            <div id="lines2"></div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const circle = document.getElementById('circle');
+        var posX=0;
+        var posY=0;
+        var direction = 'right';
+        var rotationdegree=0;
+
+
+        function rotateAndMoveCircle() {
+            if (direction == 'right') {
+                posX += 1;
+                if (posX+2 >= container.offsetWidth - circle.offsetWidth) {
+                    direction = 'up';
+                }
+            } else if (direction == 'up') {
+                posY += 1;
+                if (posY+2>= container.offsetHeight - circle.offsetHeight) {
+                    direction = 'left';
+                }
+            } else if (direction == 'left') {
+                posX -= 1;
+                if (posX+2<= 0) {
+                    direction = 'down';
+                }
+            }
+            else if (direction == 'down') {
+                posY -= 1 ;
+                if (posY+2<= 0) {
+                    direction = 'right';
+                }
+            }
+            setTimeout(()=>{   
+                rotateAndMoveCircle();
+            },100000);
+            rotationdegree+=120;
+            circle.style.transform = `rotate(${rotationdegree}deg)`;
+            circle.style.left=posX+"px";
+            circle.style.bottom=posY+"px";
+            requestAnimationFrame(rotateAndMoveCircle);
+
+        }
+
+        
+     
+        
+        
+    </script>
+    <button onclick="rotateAndMoveCircle()">Start</button>
+</body>
+</html>
